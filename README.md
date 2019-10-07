@@ -1,19 +1,21 @@
 ### NYU-DevOps Orders Squad
 
 README for the orders squad.
-#### 7 Calls
-`GET /orders`
-`POST /orders`
-`GET /orders/:id`
-`PUT /orders/:id`
-`DELETE /orders/:id`
-`GET /orders/customers/:customer_id`
-`GET /orders/products/:product_id`
+
+#### API calls
+URL | Operation | Description
+-- | -- | --
+`GET /orders` | READ | List all available routes
+`POST /orders` | CREATE | Create new order
+`GET /orders/:id` | READ | Fetch information for particular order
+`PUT /orders/:id` | UPDATE | Update particular order
+`DELETE /orders/:id` | DELETE | Delete particular order
+`GET /orders/customers/:customer_id` | READ | Fetch orders for given customer
+`GET /orders/products/:product_id` | READ | Fetch orders for given product
+`PUT /orders/cancel/:id` | UPDATE | Cancel order for given order id
+
 #### Run and Test
-`git clone git@github.com:devops-orders/orders.git`
-`cd orders`
-`vagrant up`
-`vagrant ssh`
-...
-`exit`
-`vagrant halt`
+- Clone the repository using: `git clone git@github.com:devops-orders/orders.git`
+- Start the Vagrant VM using : `vagrant up`
+- After the VM has been provisioned ssh into it using: `vagrant ssh`
+- cd into `/vagrant` using `cd /vagrant` and start the server using `FLASK_APP=service:app flask run -h 0.0.0.0`
