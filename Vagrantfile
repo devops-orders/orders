@@ -73,4 +73,13 @@ Vagrant.configure(2) do |config|
          args: "-d --name mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_ROOT_HOST='%' -p 3306:3306"
     end
 
+    config.vm.provision "shell", inline: <<-SHELL
+      echo "waiting for 10 seconds"  
+      sleep 10
+      echo "waiting 10 more"
+      sleep 10
+      cd /vagrant
+      docker exec mysql mysql -uroot -proot -e "CREATE DATABASE test;"
+    SHELL
+
   end
