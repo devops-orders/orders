@@ -47,28 +47,19 @@ from . import app
 
 ######################################################################
 # GET INDEX
-
+@app.route('/')
+def index():
+    """ Root URL response """
+    return jsonify(name='Order Demo REST API Service',
+                   version='1.0',
+                   paths=url_for('list_orders', _external=True)
+                  ), status.HTTP_200_OK
 ######################################################################
 
 
 ######################################################################
 # LIST ALL ORDERS
-@app.route('/orders', methods=['GET'])
-def list_orders():
-    """ Returns all of the Orders """
-    app.logger.info('Request for order list')
-    orders = []
-    category = request.args.get('category')
-    name = request.args.get('name')
-    if category:
-        orders = Order.find_by_category(category)
-    elif name:
-        orders = Order.find_by_name(name)
-    else:
-        orders = Order.all()
 
-    results = [order.serialize() for order in orders]
-    return make_response(jsonify(results), status.HTTP_200_OK)
 ######################################################################
 
 
