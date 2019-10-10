@@ -47,28 +47,49 @@ from . import app
 
 ######################################################################
 # GET INDEX
+
 ######################################################################
 
 
 ######################################################################
 # LIST ALL ORDERS
+@app.route('/orders', methods=['GET'])
+def list_orders():
+    """ Returns all of the Orders """
+    app.logger.info('Request for order list')
+    orders = []
+    category = request.args.get('category')
+    name = request.args.get('name')
+    if category:
+        orders = Order.find_by_category(category)
+    elif name:
+        orders = Order.find_by_name(name)
+    else:
+        orders = Order.all()
+
+    results = [order.serialize() for order in orders]
+    return make_response(jsonify(results), status.HTTP_200_OK)
 ######################################################################
 
 
 
 ######################################################################
 # RETRIEVE AN ORDER
+
 ######################################################################
 
 
 
 ######################################################################
 # ADD A NEW ORDER
+
 ######################################################################
 
 
 ######################################################################
 # UPDATE AN EXISTING ORDER
+
+
 ######################################################################
 
 
@@ -87,8 +108,7 @@ def init_db():
 
 def check_content_type(content_type):
     """ Checks that the media type is correct """
-    
+
 
 def initialize_logging(log_level=logging.INFO):
     """ Initialized the default logging to STDOUT """
-
