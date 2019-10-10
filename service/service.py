@@ -66,6 +66,25 @@ from . import app
 # ADD A NEW ORDER
 ######################################################################
 
+@app.route('/orders', methods=['POST'])
+def order_post():
+    """
+    Creates an order
+    This endpoint will create an order based the data in the body that is posted
+    """
+    app.logger.info('Request to create an order')
+    check_content_type('application/json')
+    order = Order()
+    order.deserialize(request.get_json())
+    order.save()
+    message = order.serialize()
+    location_url = url_for('get_order', order_id=order.id, _external=True)
+    return make_response(jsonify(message), status.HTTP_201_CREATED,
+                         {
+                             'Location': location_url
+                         })
+
+
 
 ######################################################################
 # UPDATE AN EXISTING ORDER
