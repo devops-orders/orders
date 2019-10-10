@@ -58,9 +58,26 @@ class TestOrderServer(unittest.TestCase):
         db.create_all()  # create new tables
         self.app = app.test_client()
 
+
+
     def tearDown(self):
         db.session.remove()
         db.drop_all()
+
+
+    def _create_orders(self, count):
+        """ Factory method to create orders in bulk """
+        orders = []
+        for _ in range(count):
+            test_order = OrderFactory()
+            resp = self.app.post('/orders',
+                                 json=test_order.serialize(),
+                                 content_type='application/json')
+            self.assertEqual(resp.status_code, status.HTTP_201_CREATED, 'Could not create a test order')
+            new_order = resp.get_json()
+            test_order.id = new_order['id']
+            pets.append(test_order)
+        return orders
 
     def test_get_order(self):
         """ Get a single order """
