@@ -13,15 +13,18 @@
 # limitations under the License.
 
 """
-Pet Store Service
+Order Service
 
 Paths:
 ------
-GET /pets - Returns a list all of the Pets
-GET /pets/{id} - Returns the Pet with a given id number
-POST /pets - creates a new Pet record in the database
-PUT /pets/{id} - updates a Pet record in the database
-DELETE /pets/{id} - deletes a Pet record in the database
+GET /orders - Returns a list all of the Orders
+GET /orders/{id} - Returns the Order with a given id number
+POST /orders - creates a new order record in the database
+PUT /orders/{id} - updates an order record in the database
+DELETE /orders/{id} - deletes an order record in the database
+GET /orders/customers/:customer_id - return orders for given customer
+GET /orders/products/:product_id - return orders for given product
+PUT /orders/cancel/:id - cancel an order for a given order id
 """
 
 import os
@@ -34,8 +37,8 @@ from werkzeug.exceptions import NotFound
 # For this example we'll use SQLAlchemy, a popular ORM that supports a
 # variety of backends including SQLite, MySQL, and PostgreSQL
 from flask_sqlalchemy import SQLAlchemy
-# from service.models import Pet, DataValidationError
-from service.models import Pet, DataValidationError
+# from service.models import order, DataValidationError
+from service.models import Order, DataValidationError
 
 # Import Flask application
 from . import app
@@ -59,7 +62,18 @@ from . import app
 ######################################################################
 # RETRIEVE AN ORDER
 ######################################################################
+@app.route('/orders/<int:order_id>', methods=['GET'])
+def get_orders(order_id):
+    """
+    Retrieve an order
 
+    This endpoint will return an order based on it's id
+    """
+    app.logger.info('Request for an order with id: %s', order_id)
+    order = Order.find(order_id)
+    if not order:
+        raise NotFound("Order with id '{}' was not found.".format(order_id))
+    return make_response(jsonify(order.serialize()), status.HTTP_200_OK)
 
 
 ######################################################################
@@ -87,8 +101,7 @@ def init_db():
 
 def check_content_type(content_type):
     """ Checks that the media type is correct """
-    
+
 
 def initialize_logging(log_level=logging.INFO):
     """ Initialized the default logging to STDOUT """
-
