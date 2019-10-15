@@ -129,7 +129,18 @@ def update_orders(order_id):
 
 ######################################################################
 # DELETE A ORDER
+@app.route('/orders/<int:order_id>', methods=['DELETE'])
+def delete_orders(order_id):
+    """
+    Delete an Order
 
+    This endpoint will delete an Order based the id specified in the path
+    """
+    app.logger.info('Request to delete an order with id: %s', order_id)
+    order = Order.find(order_id)
+    if order:
+        order.delete()
+    return make_response('', status.HTTP_204_NO_CONTENT)
 
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S
