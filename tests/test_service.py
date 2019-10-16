@@ -102,14 +102,14 @@ class TestOrderServer(unittest.TestCase):
 
     def test_update_order(self):
         """ Update an existing Order """
-        # create a pet to update
+        # create a order to update
         test_order = OrderFactory()
         resp = self.app.post('/orders',
                              json=test_order.serialize(),
                              content_type='application/json')
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
-        # update the pet
+        # update the order
         new_order = resp.get_json()
         new_order['product_id'] = 2
         resp = self.app.put('/orders/{}'.format(new_order['id']),
