@@ -128,7 +128,8 @@ def order_post():
 
 def init_db():
     """ Initialies the SQLAlchemy app """
-
+    global app
+    Order.init_db(app)
 
 def check_content_type(content_type):
     """ Checks that the media type is correct """
