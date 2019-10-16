@@ -27,8 +27,6 @@ GET /orders/products/:product_id - return orders for given product
 PUT /orders/cancel/:id - cancel an order for a given order id
 """
 
-import os
-import sys
 import logging
 from flask import Flask, jsonify, request, url_for, make_response, abort
 from flask_api import status    # HTTP Status Codes
@@ -50,8 +48,12 @@ from . import app
 
 ######################################################################
 # GET INDEX
-
 ######################################################################
+@app.route('/orders/')
+def index():
+    """ Root URL response """
+    return jsonify(name='Order Demo REST API Service',
+                   version='1.0',), status.HTTP_200_OK
 
 
 ######################################################################
@@ -63,7 +65,6 @@ from . import app
 
 ######################################################################
 # RETRIEVE AN ORDER
-
 ######################################################################
 @app.route('/orders/<int:order_id>', methods=['GET'])
 def get_orders(order_id):
@@ -81,9 +82,7 @@ def get_orders(order_id):
 
 ######################################################################
 # ADD A NEW ORDER
-
 ######################################################################
-
 @app.route('/orders', methods=['POST'])
 def order_post():
     """
@@ -96,7 +95,7 @@ def order_post():
     order.deserialize(request.get_json())
     order.save()
     message = order.serialize()
-    location_url = url_for('get_order', order_id=order.id, _external=True)
+    location_url = url_for('get_orders', order_id=order.id, _external=True)
     return make_response(jsonify(message), status.HTTP_201_CREATED,
                          {
                              'Location': location_url
@@ -106,6 +105,7 @@ def order_post():
 
 ######################################################################
 # UPDATE AN EXISTING ORDER
+######################################################################
 @app.route('/orders/<int:order_id>', methods=['PUT'])
 def update_orders(order_id):
     """
@@ -123,12 +123,12 @@ def update_orders(order_id):
     order.save()
     return make_response(jsonify(order.serialize()), status.HTTP_200_OK)
 
-######################################################################
 
 
 
 ######################################################################
 # DELETE A ORDER
+######################################################################
 @app.route('/orders/<int:order_id>', methods=['DELETE'])
 def delete_orders(order_id):
     """

@@ -30,8 +30,8 @@ from service.models import Order, DataValidationError, db
 from .order_factory import OrderFactory
 from service.service import app, init_db, initialize_logging
 
-#DATABASE_URI = os.getenv('DATABASE_URI', 'sqlite:///../db/test.db')
-DATABASE_URI = os.getenv('DATABASE_URI', 'postgres://postgres:passw0rd@localhost:5432/postgres')
+
+DATABASE_URI = os.getenv('DATABASE_URI', 'mysql+pymysql://root:root@localhost:3306/test')
 
 ######################################################################
 #  T E S T   C A S E S
@@ -76,8 +76,15 @@ class TestOrderServer(unittest.TestCase):
             self.assertEqual(resp.status_code, status.HTTP_201_CREATED, 'Could not create a test order')
             new_order = resp.get_json()
             test_order.id = new_order['id']
-            pets.append(test_order)
+            orders.append(test_order)
         return orders
+    
+    def test_root_url(self):
+        """ Test / route """
+        resp = self.app.get('/orders/', 
+                            content_type='application/json')
+        print(resp)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
     def test_get_order(self):
         """ Get a single order """
@@ -86,7 +93,7 @@ class TestOrderServer(unittest.TestCase):
                             content_type='application/json')
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()
-        self.assertEqual(data['name'], test_order.name)
+        self.assertEqual(data['uuid'], test_order.uuid)
 
     def test_get_order_not_found(self):
         """ Get an order thats not found """
