@@ -58,8 +58,6 @@ class Order(db.Model):
     price = db.Column(db.Integer)
     quantity = db.Column(db.Integer)
 
-    def __repr__(self):
-        return '<Order %r>' % (self.uuid)
 
     def save(self):
         """
