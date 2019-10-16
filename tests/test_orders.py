@@ -145,6 +145,23 @@ class TestOrders(unittest.TestCase):
         self.assertEqual(order.customer_id, 1),
         self.assertEqual(order.price, 10),
         self.assertEqual(order.quantity, 1)
+    
+    def test_find_order_by_product(self):
+        """ Find an Order by Product ID """
+        uuid_str = str(uuid.uuid4())
+        Order(uuid=uuid_str, product_id = 1, customer_id = 1, price = 10, quantity = 1).save()
+        next_order = Order(uuid = "2edf8761-0c1f-4039-9f5c-907a5a03f39c", product_id = 2, customer_id = 1, price = 10, quantity = 1)
+        next_order.save()
+        order = Order.find_by_product(2)[0]
+        self.assertIsNot(order, None)
+        self.assertEqual(order.id, next_order.id)
+        self.assertEqual(order.uuid, "2edf8761-0c1f-4039-9f5c-907a5a03f39c")
+        self.assertEqual(order.product_id, 2),
+        self.assertEqual(order.customer_id, 1),
+        self.assertEqual(order.price, 10),
+        self.assertEqual(order.quantity, 1)
+    
+    
 
     
 

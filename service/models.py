@@ -127,20 +127,20 @@ class Order(db.Model):
         return cls.query.get(order_id)
 
     @classmethod
+    def find_by_product(cls, product):
+        """ Returns all of the Orders linked to a product
+
+        Args:
+            product (int): the product of the Orders you want to match
+        """
+        cls.logger.info('Processing category query for %s ...', product)
+        cls.logger.info(type(product))
+        cls.logger.info(cls.query.filter(cls.product_id == product))
+        return cls.query.filter(cls.product_id == product)
+    
+
+    @classmethod
     def find_or_404(cls, order_id):
         """ Find a Order by it's id """
         cls.logger.info('Processing lookup or 404 for id %s ...', order_id)
         return cls.query.get_or_404(order_id)
-
-
-    # @classmethod
-    # def find_by_category(cls, category):
-    #     """ Returns all of the Orders in a category
-
-    #     Args:
-    #         category (string): the category of the Orders you want to match
-    #     """
-    #     cls.logger.info('Processing category query for %s ...', category)
-    #     return cls.query.filter(cls.category == category)
-
-

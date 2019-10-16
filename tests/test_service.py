@@ -94,6 +94,15 @@ class TestOrderServer(unittest.TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()
         self.assertEqual(data['uuid'], test_order.uuid)
+    
+    def test_get_order_by_product(self):
+        """ Get an order linked to product"""
+        test_order = self._create_orders(1)[0]
+        resp = self.app.get('/orders/product/{}'.format(test_order.product_id),
+                            content_type='application/json')
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()[0]
+        self.assertEqual(data['uuid'], test_order.uuid)
 
     def test_get_order_not_found(self):
         """ Get an order thats not found """
@@ -118,6 +127,23 @@ class TestOrderServer(unittest.TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         updated_order = resp.get_json()
         self.assertEqual(updated_order['product_id'], 2)
+    
+    def test_update_order_failure(self):
+        """ Update an existing Order (failure) """
+        # create a order to update
+        test_order = OrderFactory()
+        resp = self.app.post('/orders',
+                             json=test_order.serialize(),
+                             content_type='application/json')
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+        # update the order
+        new_order = resp.get_json()
+        new_order['product_id'] = 2
+        resp = self.app.put('/orders/{}'.format(5),
+                            json=new_order,
+                            content_type='application/json')
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_order(self):
         """ Delete a Order """
