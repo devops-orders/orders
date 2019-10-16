@@ -99,3 +99,34 @@ class TestOrderServer(unittest.TestCase):
         """ Get an order thats not found """
         resp = self.app.get('/orders/0')
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_update_order(self):
+        """ Update an existing Order """
+        # create a pet to update
+        test_order = OrderFactory()
+        resp = self.app.post('/orders',
+                             json=test_order.serialize(),
+                             content_type='application/json')
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+        # update the pet
+        new_order = resp.get_json()
+        new_order['product_id'] = 2
+        resp = self.app.put('/orders/{}'.format(new_order['id']),
+                            json=new_order,
+                            content_type='application/json')
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        updated_order = resp.get_json()
+        self.assertEqual(updated_order['product_id'], 2)
+
+    def test_delete_order(self):
+        """ Delete a Order """
+        test_pet = self._create_orders(1)[0]
+        resp = self.app.delete('/orders/{}'.format(test_pet.id),
+                               content_type='application/json')
+        self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(len(resp.data), 0)
+        # make sure they are deleted
+        resp = self.app.get('/orders/{}'.format(test_pet.id),
+                            content_type='application/json')
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
