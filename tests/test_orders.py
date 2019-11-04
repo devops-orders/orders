@@ -125,6 +125,17 @@ class TestOrders(unittest.TestCase):
         self.assertEqual(order.price, 10),
         self.assertEqual(order.quantity, 1)
 
+
+    # def test_get_order_customerid(self):
+    #     """ Tests get a single order by customer id"""
+    #     # get the customer id of an order
+    #     test_order = self._create_orders(1)[0]
+    #     resp = self.app.get('/orders/customers/{}'.format(test_order.customer_id),
+    #                         content_type='application/json')
+    #     self.assertEqual(resp.status_code, status.HTTP_200_OK)
+    #     data = resp.get_json()
+    #     self.assertEqual(data['uuid'], test_order.name)
+
     def test_deserialize_bad_data(self):
         """ Test deserialization of bad data """
         data = "this is not a dictionary"

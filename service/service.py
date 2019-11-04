@@ -71,6 +71,28 @@ def list_orders(product_id):
     results = [order.serialize() for order in orders]
     return make_response(jsonify(results), status.HTTP_200_OK)
 
+
+######################################################################
+# RETRIEVE AN ORDER BASED ON CUSTOMER ID
+######################################################################
+
+@app.route('/orders/customers/<int:customer_id>', methods=['GET'])
+def get_orders_customerid(customer_id):
+    """
+    Retrieve an order
+
+    This endpoint will return an order based on it's customer id
+    """
+    print(customer_id)
+    app.logger.info('Request for order list based on customer id: %s', customer_id)
+    orders = Order.find_by_customer(customer_id)
+    if not orders:
+    	raise NotFound("Order with customer id '{}' was not found.".format(customer_id))
+    else:
+    	results = [order.serialize() for order in orders]
+    	return make_response(jsonify(results), status.HTTP_200_OK)
+
+
 ######################################################################
 # RETRIEVE AN ORDER
 ######################################################################
