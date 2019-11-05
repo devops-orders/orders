@@ -1,5 +1,5 @@
 ### NYU-DevOps Orders Squad
-
+[![codecov](https://codecov.io/gh/devops-orders/orders/branch/master/graph/badge.svg)](https://codecov.io/gh/devops-orders/orders)
 README for the orders squad.
 
 #### API calls
