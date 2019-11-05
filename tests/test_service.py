@@ -78,10 +78,10 @@ class TestOrderServer(unittest.TestCase):
             test_order.id = new_order['id']
             orders.append(test_order)
         return orders
-    
+
     def test_root_url(self):
         """ Test / route """
-        resp = self.app.get('/orders/', 
+        resp = self.app.get('/orders/',
                             content_type='application/json')
         print(resp)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
@@ -94,7 +94,7 @@ class TestOrderServer(unittest.TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()
         self.assertEqual(data['uuid'], test_order.uuid)
-    
+
     def test_get_order_by_product(self):
         """ Get an order linked to product"""
         test_order = self._create_orders(1)[0]
@@ -127,7 +127,7 @@ class TestOrderServer(unittest.TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         updated_order = resp.get_json()
         self.assertEqual(updated_order['product_id'], 2)
-    
+
     def test_update_order_failure(self):
         """ Update an existing Order (failure) """
         # create a order to update
