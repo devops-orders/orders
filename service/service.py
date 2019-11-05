@@ -49,7 +49,7 @@ from . import app
 ######################################################################
 # GET INDEX
 ######################################################################
-@app.route('/orders/')
+@app.route('/')
 def index():
     """ Root URL response """
     return jsonify(name='Order Demo REST API Service',
@@ -59,7 +59,18 @@ def index():
 ######################################################################
 # LIST ALL ORDERS
 ######################################################################
+@app.route('/orders', methods=['GET'])
+def list_all_orders():
+    """ Returns all of the Orders """
+    app.logger.info('Request for order list')
+    orders = Order.all()
 
+    results = [order.serialize() for order in orders]
+    return make_response(jsonify(results), status.HTTP_200_OK)
+
+######################################################################
+# LIST ORDERS BASED ON PRODUCT ID
+######################################################################
 @app.route('/orders/product/<int:product_id>', methods=['GET'])
 def list_orders(product_id):
     """ Returns all of the Orders """
