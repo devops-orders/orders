@@ -3,15 +3,16 @@ python:
   - "3.6"
 
 services:
-  - docker
+  - mysql
 
 before_install:
-  - docker pull mysql:5.5.62
-  - docker run --name mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_ROOT_HOST='%' -p 3306:3306 -d mysql:5.5.62
-  - docker exec mysql mysql -uroot -proot -e "CREATE DATABASE test;"
-  - docker ps -a
+  - mysql -e 'CREATE DATABASE test;'
 
 install: "pip3 install -r requirements.txt"
+
+env:
+  global:
+    - DATABASE_URI='mysql+pymysql://root:root@localhost:3306/test'
 
 script: nosetests
 
