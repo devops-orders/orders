@@ -166,7 +166,6 @@ class TestOrderServer(unittest.TestCase):
                             content_type='application/json')
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
-<<<<<<< HEAD
     def test_get_order_by_customer(self):
         """ Get an order linked to customer id"""
         test_order = self._create_orders(1)[0]
@@ -176,7 +175,8 @@ class TestOrderServer(unittest.TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()[0]
         self.assertEqual(data['uuid'], test_order.uuid)
-=======
+
+
     def test_cancel_order(self):
         """ cancel an existing Order """
         # create a order to cancel
@@ -212,4 +212,3 @@ class TestOrderServer(unittest.TestCase):
                             json=new_order,
                             content_type='application/json')
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
->>>>>>> 7f4f365d30cc0e396f3fd3a604ad076ee2b1af70
