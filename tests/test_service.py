@@ -200,3 +200,8 @@ class TestOrderServer(unittest.TestCase):
                             json=new_order,
                             content_type='application/json')
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_server_error(self):
+        """Test INTERNAL_SERVER_ERROR"""
+        resp = self.app.post('/orders')
+        self.assertEqual(resp.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
