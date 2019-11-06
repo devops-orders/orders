@@ -177,7 +177,7 @@ class TestOrderServer(unittest.TestCase):
         # cancel the order
         new_order = resp.get_json()
         new_order['status'] = 'Cancelled'
-        resp = self.app.put('/orders/cancel/{}'.format(new_order['id']),
+        resp = self.app.put('/orders/{}/cancel'.format(new_order['id']),
                             json=new_order,
                             content_type='application/json')
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
@@ -196,7 +196,7 @@ class TestOrderServer(unittest.TestCase):
         # cancel the order
         new_order = resp.get_json()
         new_order['status'] = 'Cancelled'
-        resp = self.app.put('/orders/cancel/{}'.format(23),
+        resp = self.app.put('/orders/{}/cancel'.format(23),
                             json=new_order,
                             content_type='application/json')
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)

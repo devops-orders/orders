@@ -165,7 +165,7 @@ def delete_orders(order_id):
 ######################################################################
 # CANCEL AN ORDER
 ######################################################################
-@app.route('/orders/cancel/<int:order_id>', methods=['PUT'])
+@app.route('/orders/<int:order_id>/cancel', methods=['PUT'])
 def cancel_orders(order_id):
     """
     Cancel an Order
