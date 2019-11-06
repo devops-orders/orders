@@ -12,7 +12,7 @@ install: "pip3 install -r requirements.txt"
 
 env:
   global:
-    - DATABASE_URI='mysql+pymysql://root:root@localhost:3306/test'
+    - DATABASE_URI='mysql+pymysql://root@localhost:3306/test'
 
 script: nosetests
 
