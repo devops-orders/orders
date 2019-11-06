@@ -1,5 +1,6 @@
 language: python
 python:
+<<<<<<< HEAD
   - "3"
 
 # command to install dependencies
@@ -16,3 +17,25 @@ script:
 
 services:
   - redis-server
+=======
+  - "3.6"
+
+services:
+  - postgresql
+
+# command to install dependencies
+install: "pip3 install -r requirements.txt"
+
+env:
+  global:
+  - DATABASE_URI='postgres://postgres:@localhost:5432/testdb'
+
+before_script:
+  - psql -c 'create database testdb;' -U postgres
+
+# command to run tests
+script: nosetests
+
+after_success:
+ - codecov
+>>>>>>> 7f4f365d30cc0e396f3fd3a604ad076ee2b1af70

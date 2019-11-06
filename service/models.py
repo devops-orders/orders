@@ -57,6 +57,7 @@ class Order(db.Model):
     customer_id = db.Column(db.Integer)
     price = db.Column(db.Integer)
     quantity = db.Column(db.Integer)
+    status = db.Column(db.Enum('In Progress', 'Delivered', 'Cancelled'))
 
 
     def save(self):
@@ -81,7 +82,8 @@ class Order(db.Model):
                 "customer_id": self.customer_id,
                 "product_id": self.product_id,
                 "price": self.price,
-                "quantity": self.quantity
+                "quantity": self.quantity,
+                "status": self.status
                 }
 
     def deserialize(self, data):
@@ -97,6 +99,7 @@ class Order(db.Model):
             self.product_id = data['product_id']
             self.price = data["price"]
             self.quantity = data["quantity"]
+            self.status = data["status"]
         except KeyError as error:
             raise DataValidationError('Invalid order: missing ' + error.args[0])
         except TypeError as error:
