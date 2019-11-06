@@ -114,7 +114,7 @@ class TestOrders(unittest.TestCase):
 
     def test_deserialize_a_order(self):
         """ Test deserialization of an Order """
-        data = {"uuid" : "2edf8761-0c1f-4039-9f5c-907a5a03f39c","product_id" : 1,"customer_id" : 1,"price" : 10,"quantity" : 1}
+        data = {"uuid" : "2edf8761-0c1f-4039-9f5c-907a5a03f39c","product_id" : 1,"customer_id" : 1,"price" : 10,"quantity" : 1, "status": "In Progress"}
         order = Order()
         order.deserialize(data)
         self.assertNotEqual(order, None)

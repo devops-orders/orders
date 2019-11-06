@@ -164,3 +164,39 @@ class TestOrderServer(unittest.TestCase):
         resp = self.app.get('/orders/{}'.format(test_pet.id),
                             content_type='application/json')
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_cancel_order(self):
+        """ cancel an existing Order """
+        # create a order to cancel
+        test_order = OrderFactory()
+        resp = self.app.post('/orders',
+                             json=test_order.serialize(),
+                             content_type='application/json')
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+        # cancel the order
+        new_order = resp.get_json()
+        new_order['status'] = 'Cancelled'
+        resp = self.app.put('/orders/cancel/{}'.format(new_order['id']),
+                            json=new_order,
+                            content_type='application/json')
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        cancelled_order = resp.get_json()
+        self.assertEqual(cancelled_order['status'], 'Cancelled')
+
+    def test_cancel_order_failure(self):
+        """ Failure test for cancelling an existing Order """
+        # create a order to cancel
+        test_order = OrderFactory()
+        resp = self.app.post('/orders',
+                             json=test_order.serialize(),
+                             content_type='application/json')
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+        # cancel the order
+        new_order = resp.get_json()
+        new_order['status'] = 'Cancelled'
+        resp = self.app.put('/orders/cancel/{}'.format(23),
+                            json=new_order,
+                            content_type='application/json')
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
