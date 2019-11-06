@@ -16,6 +16,7 @@ class OrderFactory(factory.Factory):
     customer_id = 1
     price = 20
     quantity = 1
+    status = 'In Progress'
 
 if __name__ == '__main__':
     for _ in range(10):

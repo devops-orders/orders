@@ -168,7 +168,7 @@ def update_orders(order_id):
 
 
 ######################################################################
-# DELETE A ORDER
+# DELETE AN ORDER
 ######################################################################
 @app.route('/orders/<int:order_id>', methods=['DELETE'])
 def delete_orders(order_id):
@@ -182,6 +182,27 @@ def delete_orders(order_id):
     if order:
         order.delete()
     return make_response('', status.HTTP_204_NO_CONTENT)
+
+######################################################################
+# CANCEL AN ORDER
+######################################################################
+@app.route('/orders/<int:order_id>/cancel', methods=['PUT'])
+def cancel_orders(order_id):
+    """
+    Cancel an Order
+
+    This endpoint will cancel an Order based the id specified in the path
+    """
+
+    app.logger.info('Request to cancel an order with id: %s', order_id)
+    check_content_type('application/json')
+    order = Order.find(order_id)
+    if not order:
+        raise NotFound("Order with id '{}' was not found.".format(order_id))
+    order.deserialize(request.get_json())
+    order.status = 'Cancelled'
+    order.save()
+    return make_response(jsonify(order.serialize()), status.HTTP_200_OK)
 
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S
