@@ -1,5 +1,7 @@
 ### NYU-DevOps Orders Squad
 [![codecov](https://codecov.io/gh/devops-orders/orders/branch/master/graph/badge.svg)](https://codecov.io/gh/devops-orders/orders)
+[![Build Status](https://travis-ci.org/devops-orders/orders.svg?branch=master)](https://travis-ci.org/devops-orders/orders)
+
 README for the orders squad.
 
 #### API calls
@@ -11,7 +13,7 @@ URL | Operation | Description
 `PUT /orders/:id` | UPDATE | Update particular order
 `DELETE /orders/:id` | DELETE | Delete particular order
 `GET /orders/products/:product_id` | READ | Fetch orders for given product
-`PUT /orders/cancel/:id` | PUT | Cancel order for given order id
+`PUT /orders/:id/cancel` | PUT | Cancel order for given order id
 
 #### Run and Test
 - Clone the repository using: `git clone git@github.com:devops-orders/orders.git`
