@@ -147,3 +147,45 @@ class Order(db.Model):
         """ Find a Order by it's id """
         cls.logger.info('Processing lookup or 404 for id %s ...', order_id)
         return cls.query.get_or_404(order_id)
+
+
+
+    # Look for Cloudant in VCAP_SERVICES
+    for service in vcap_services:
+        if service.startswith('cloudantNoSQLDB'):
+            cloudant_service = vcap_services[service][0]
+            opts['username'] = cloudant_service['credentials']['username']
+            opts['password'] = cloudant_service['credentials']['password']
+            opts['host'] = cloudant_service['credentials']['host']
+            opts['port'] = cloudant_service['credentials']['port']
+            opts['url'] = cloudant_service['credentials']['url']
+
+    if any(k not in opts for k in ('host', 'username', 'password', 'port', 'url')):
+        order.logger.info('Error - Failed to retrieve options. ' \
+                             'Check that app is bound to a Cloudant service.')
+        exit(-1)
+
+    order.logger.info('Cloudant Endpoint: %s', opts['url'])
+    try:
+        if ADMIN_PARTY:
+            order.logger.info('Running in Admin Party Mode...')
+        order.client = Cloudant(opts['username'],
+                                  opts['password'],
+                                  url=opts['url'],
+                                  connect=True,
+                                  auto_renew=True,
+                                  admin_party=ADMIN_PARTY
+                                 )
+    except ConnectionError:
+        raise AssertionError('Cloudant service could not be reached')
+
+    # Create database if it doesn't exist
+    try:
+        order.database = order.client[dbname]
+    except KeyError:
+        # Create a database using an initialized client
+        order.database = order.client.create_database(dbname)
+    # check for success
+    if not order.database.exists():
+        raise AssertionError('Database [{}] could not be obtained'.format(dbname))
+
