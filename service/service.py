@@ -66,7 +66,7 @@ def internal_server_error(error):
     return jsonify(status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                    error='Internal Server Error',
                    message=message), status.HTTP_500_INTERNAL_SERVER_ERROR
-    
+
 ######################################################################
 # GET INDEX
 ######################################################################
