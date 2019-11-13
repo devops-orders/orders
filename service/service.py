@@ -66,15 +66,16 @@ def internal_server_error(error):
     return jsonify(status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                    error='Internal Server Error',
                    message=message), status.HTTP_500_INTERNAL_SERVER_ERROR
-    
+
 ######################################################################
 # GET INDEX
 ######################################################################
 @app.route('/')
 def index():
     """ Root URL response """
-    return jsonify(name='Order Demo REST API Service',
-                   version='1.0',), status.HTTP_200_OK
+    #return jsonify(name='Order Demo REST API Service',
+                   #version='1.0',), status.HTTP_200_OK
+    return app.send_static_file('index.html')
 
 
 ######################################################################
