@@ -1,6 +1,7 @@
 # Local OS metadata
 .DS_Store
 Thumbs.db
+.vscode
 
 # Vagrant
 .vagrant
