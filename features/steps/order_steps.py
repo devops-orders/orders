@@ -22,6 +22,8 @@ def step_impl(context, message):
     assert message in context.resp.data
 
 
-@then(u'I should not see "404 Not Found"')
-def step_impl(context):
-    raise NotImplementedError(u'STEP: Then I should not see "404 Not Found"')
+@then(u'I should not see "{message}"')
+def step_impl(context, message):
+    error_msg = "I should not see '%s' in '%s'" % (message, context.resp.data)
+    message = bytes(message, 'ascii')
+    ensure(message in context.resp.data, False, error_msg)
