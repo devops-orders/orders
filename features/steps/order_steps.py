@@ -139,3 +139,16 @@ def step_impl(context, text):
     element = context.driver.find_element_by_id('search_results')
     error_msg = "I should not see '%s' in '%s'" % (text, element.text)
     ensure(text in element.text, False, error_msg)
+
+@then(u'I should see "{text_string}" in the "{element_name}" dropdown')
+def step_impl(context, text_string, element_name):
+    element_id = 'order_' + element_name.lower()
+    element = Select(context.driver.find_element_by_id(element_id))
+    expect(element.first_selected_option.text).to_equal(text_string)
+
+
+@when(u'I select "{text_string}" in the "{element_name}" dropdown')
+def step_impl(context, text_string, element_name):
+    element_id = 'order_' + element_name.lower()
+    element = Select(context.driver.find_element_by_id(element_id))
+    element.select_by_visible_text(text_string)
