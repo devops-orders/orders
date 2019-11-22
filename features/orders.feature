@@ -37,3 +37,13 @@ Scenario: Update an Order
     And I press the "Search" button
     Then I should see "150" in the results
     And I should not see "10" in the results
+
+Scenario: Delete an order
+    When I visit the "Home Page"
+    And I set the "Product_ID" to "3"
+    And I press the "Search" button
+    Then I should see "efac5640-0437-4e83-a4d4-37f8a62359d6" in the "uuid" field
+    When I copy the "ID" field
+    And I press the "Delete" button
+    Then I should see the message "Order has been Deleted!"
+ 
