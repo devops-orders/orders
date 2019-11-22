@@ -39,6 +39,32 @@ Scenario: Update an Order
     And I should not see "10" in the results
 
 
+Scenario: Create an Order
+    When I visit the "Home Page"
+    And I press the "Generate" button
+    And I set the "Price" to "10"
+    And I set the "Quantity" to "1"
+    And I set the "Customer_ID" to "10"
+    And I set the "Product_ID" to "4"
+    And I select "In Progress" in the "Status" dropdown
+    And I press the "Create" button
+    Then I should see the message "Success"
+    When I copy the "ID" field
+    And I press the "Clear" button
+    Then the "ID" field should be empty
+    And the "Price" field should be empty
+    And the "Quantity" field should be empty
+    And the "Customer_ID" field should be empty
+    And the "Product_ID" field should be empty
+    And the "Status" field should be empty
+    When I paste the "ID" field
+    And I press the "Retrieve" button
+    Then I should see "10" in the "Price" field
+    And I should see "1" in the "Quantity" field
+    And I should see "10" in the "Customer_ID" field
+    And I should see "4" in the "Product_ID" field
+    And I should see "In Progress" in the "Status" dropdown
+
 Scenario: Cancel an Order
     When I visit the "home page"
     And I set the "Product_ID" to "3"
@@ -66,4 +92,4 @@ Scenario: Delete an order
     When I copy the "ID" field
     And I press the "Delete" button
     Then I should see the message "Order has been Deleted!"
- 
+
