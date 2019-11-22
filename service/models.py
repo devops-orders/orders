@@ -33,6 +33,18 @@ quantity (integer) : number of products items in the order
 import logging
 from flask_sqlalchemy import SQLAlchemy
 
+
+# get configruation from enviuronment (12-factor)
+ADMIN_PARTY = os.environ.get('ADMIN_PARTY', 'False').lower() == 'true'
+CLOUDANT_HOST = os.environ.get('CLOUDANT_HOST', 'localhost')
+CLOUDANT_USERNAME = os.environ.get('CLOUDANT_USERNAME', 'root')
+CLOUDANT_PASSWORD = os.environ.get('CLOUDANT_PASSWORD', 'root')
+
+# global variables for retry (must be int)
+RETRY_COUNT = int(os.environ.get('RETRY_COUNT', 10))
+RETRY_DELAY = int(os.environ.get('RETRY_DELAY', 1))
+RETRY_BACKOFF = int(os.environ.get('RETRY_BACKOFF', 2))
+
 # Create the SQLAlchemy object to be initialized later in init_db()
 db = SQLAlchemy()
 
@@ -149,43 +161,66 @@ class Order(db.Model):
         return cls.query.get_or_404(order_id)
 
 
+############################################################
+#  C L O U D A N T   D A T A B A S E   C O N N E C T I O N
+############################################################
 
-    # Look for Cloudant in VCAP_SERVICES
-    for service in vcap_services:
-        if service.startswith('cloudantNoSQLDB'):
-            cloudant_service = vcap_services[service][0]
-            opts['username'] = cloudant_service['credentials']['username']
-            opts['password'] = cloudant_service['credentials']['password']
-            opts['host'] = cloudant_service['credentials']['host']
-            opts['port'] = cloudant_service['credentials']['port']
-            opts['url'] = cloudant_service['credentials']['url']
+    @staticmethod
+    def init_db(dbname='orders'):
+        """
+        Initialized Coundant database connection
+        """
+        opts = {}
+        # Try and get VCAP from the environment
+        if 'VCAP_SERVICES' in os.environ:
+            order.logger.info('Found Cloud Foundry VCAP_SERVICES bindings')
+            vcap_services = json.loads(os.environ['VCAP_SERVICES'])
+            # Look for Cloudant in VCAP_SERVICES
+            for service in vcap_services:
+                if service.startswith('cloudantNoSQLDB'):
+                    opts = vcap_services[service][0]['credentials']
 
-    if any(k not in opts for k in ('host', 'username', 'password', 'port', 'url')):
-        order.logger.info('Error - Failed to retrieve options. ' \
+        # if VCAP_SERVICES isn't found, maybe we are running on Kubernetes?
+        if not opts and 'BINDING_CLOUDANT' in os.environ:
+            Pet.logger.info('Found Kubernetes BINDING_CLOUDANT bindings')
+            opts = json.loads(os.environ['BINDING_CLOUDANT'])
+
+        # If Cloudant not found in VCAP_SERVICES or BINDING_CLOUDANT
+        # get it from the CLOUDANT_xxx environment variables
+        if not opts:
+            order.logger.info('VCAP_SERVICES and BINDING_CLOUDANT undefined.')
+            opts = {
+                "username": CLOUDANT_USERNAME,
+                "password": CLOUDANT_PASSWORD,
+                "host": CLOUDANT_HOST,
+                "port": 5984,
+                "url": "http://"+CLOUDANT_HOST+":5984/"
+            }
+
+        if any(k not in opts for k in ('host', 'username', 'password', 'port', 'url')):
+            raise DatabaseConnectionError('Error - Failed to retrieve options. ' \
                              'Check that app is bound to a Cloudant service.')
-        exit(-1)
 
-    order.logger.info('Cloudant Endpoint: %s', opts['url'])
-    try:
-        if ADMIN_PARTY:
-            order.logger.info('Running in Admin Party Mode...')
-        order.client = Cloudant(opts['username'],
+        order.logger.info('Cloudant Endpoint: %s', opts['url'])
+        try:
+            if ADMIN_PARTY:
+                order.logger.info('Running in Admin Party Mode...')
+            order.client = Cloudant(opts['username'],
                                   opts['password'],
                                   url=opts['url'],
                                   connect=True,
                                   auto_renew=True,
                                   admin_party=ADMIN_PARTY
                                  )
-    except ConnectionError:
-        raise AssertionError('Cloudant service could not be reached')
+        except ConnectionError:
+            raise DatabaseConnectionError('Cloudant service could not be reached')
 
-    # Create database if it doesn't exist
-    try:
-        order.database = order.client[dbname]
-    except KeyError:
-        # Create a database using an initialized client
-        order.database = order.client.create_database(dbname)
-    # check for success
-    if not order.database.exists():
-        raise AssertionError('Database [{}] could not be obtained'.format(dbname))
-
+        # Create database if it doesn't exist
+        try:
+            order.database = order.client[dbname]
+        except KeyError:
+            # Create a database using an initialized client
+            order.database = order.client.create_database(dbname)
+        # check for success
+        if not order.database.exists():
+            raise DatabaseConnectionError('Database [{}] could not be obtained'.format(dbname))
