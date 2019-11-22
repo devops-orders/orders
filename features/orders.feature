@@ -43,10 +43,7 @@ Scenario: Delete an order
     And I set the "Product_ID" to "3"
     And I press the "Search" button
     Then I should see "efac5640-0437-4e83-a4d4-37f8a62359d6" in the "uuid" field
-    When I copy the "Order_ID" field
+    When I copy the "ID" field
     And I press the "Delete" button
     Then I should see the message "Order has been Deleted!"
-    When I press the "Clear" button
-    And I paste the "Order_ID" field
-    And I press the "Search" button
-    Then I should not see "Order_ID" in the results
+ 
