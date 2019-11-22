@@ -38,6 +38,7 @@ Scenario: Update an Order
     Then I should see "150" in the results
     And I should not see "10" in the results
 
+
 Scenario: Create an Order
     When I visit the "Home Page"
     And I press the "Generate" button
@@ -63,3 +64,32 @@ Scenario: Create an Order
     And I should see "10" in the "Customer_ID" field
     And I should see "4" in the "Product_ID" field
     And I should see "In Progress" in the "Status" dropdown
+
+Scenario: Cancel an Order
+    When I visit the "home page"
+    And I set the "Product_ID" to "3"
+    And I press the "Search" button
+    Then I should see "efac5640-0437-4e83-a4d4-37f8a62359d6" in the "uuid" field
+    And I should see "22" in the "Price" field
+    And I should see "10" in the "Quantity" field
+    And I should see "1" in the "Customer_ID" field
+    And I should see "3" in the "Product_ID" field
+    And I should see "In Progress" in the "Status" dropdown
+    When I select "Cancelled" in the "Status" dropdown
+    And I press the "Update" button
+    Then I should see the message "Success"
+    When I copy the "ID" field
+    And I press the "Clear" button
+    And I paste the "ID" field
+    And I press the "Retrieve" button
+    Then I should see "Cancelled" in the "Status" dropdown
+
+Scenario: Delete an order
+    When I visit the "Home Page"
+    And I set the "Product_ID" to "3"
+    And I press the "Search" button
+    Then I should see "efac5640-0437-4e83-a4d4-37f8a62359d6" in the "uuid" field
+    When I copy the "ID" field
+    And I press the "Delete" button
+    Then I should see the message "Order has been Deleted!"
+
