@@ -118,6 +118,11 @@ class Order(db.Model):
         db.create_all()  # make our sqlalchemy tables
 
     @classmethod
+    def remove_all(cls):
+        """ Removes all documents from the database (use for testing)  """
+        cls.query.delete()
+
+    @classmethod
     def all(cls):
         """ Returns all of the Orders in the database """
         cls.logger.info('Processing all Orders')
@@ -140,7 +145,7 @@ class Order(db.Model):
         cls.logger.info(type(product))
         cls.logger.info(cls.query.filter(cls.product_id == product))
         return cls.query.filter(cls.product_id == product)
-    
+
 
     @classmethod
     def find_or_404(cls, order_id):
