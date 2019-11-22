@@ -6,7 +6,7 @@ $(function () {
 
     // Updates the form with data from the response
     function update_form_data(res) {
-        $("#order_id").val(res._id);
+        $("#order_id").val(res.id);
         $("#order_uuid").val(res.uuid);
         $("#order_price").val(res.price);
         $("#order_quantity").val(res.quantity);
@@ -237,7 +237,7 @@ $(function () {
             var firstOrder = "";
             for(var i = 0; i < res.length; i++) {
                 var order = res[i];
-                var row = "<tr><td>"+order._id+"</td><td>"+order.price+"</td><td>"+order.quantity+"</td><td>"+order.customer_id+"</td><td>"+order.product_id+"</td><td>"+order.status+"</td></tr>";
+                var row = "<tr><td>"+order.id+"</td><td>"+order.price+"</td><td>"+order.quantity+"</td><td>"+order.customer_id+"</td><td>"+order.product_id+"</td><td>"+order.status+"</td></tr>";
                 $("#search_results").append(row);
                 if (i == 0) {
                     firstOrder = order;

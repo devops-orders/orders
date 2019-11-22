@@ -206,6 +206,15 @@ def cancel_orders(order_id):
     return make_response(jsonify(order.serialize()), status.HTTP_200_OK)
 
 ######################################################################
+# DELETE ALL PET DATA (for testing only)
+######################################################################
+@app.route('/orders/reset', methods=['DELETE'])
+def orders_reset():
+    """ Removes all orders from the database """
+    Order.remove_all()
+    return make_response('', status.HTTP_204_NO_CONTENT)
+
+######################################################################
 #  U T I L I T Y   F U N C T I O N S
 ######################################################################
 
