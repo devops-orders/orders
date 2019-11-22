@@ -37,3 +37,30 @@ Scenario: Update an Order
     And I press the "Search" button
     Then I should see "150" in the results
     And I should not see "10" in the results
+
+Scenario: Create an Order
+    When I visit the "Home Page"
+    And I set the "Order uuid" to "1ba0f35e-7288-46f7-855a-6ea4b9ebfb81"
+    And I set the "Price" to "10"
+    And I set the "Quantity" to "1"
+    And I set the "Customer ID" to "10"
+    And I set the "Product ID"  to "4"
+    And I select "In Progress" in the "Status" dropdown
+    And I press the "Create" button
+    Then I should see the message "Success"
+    When I copy the "Order ID" field
+    And I press the "Clear" button
+    Then the "Order ID" field should be empty
+    And the "Price" field should be empty
+    And the "Quantity" field should be empty
+    And the "Customer ID" field should be empty
+    And the "Product ID" field should be empty
+    And the "Status" field should be empty
+    When I paste the "Order ID" field
+    And I press the "Retrieve" button
+    Then I should see "1ba0f35e-7288-46f7-855a-6ea4b9ebfb81" in the "Order uuid" field
+    And I should see "10" in the "Price" field
+    And I should see "1" in the "Quantity" field
+    And I should see "10" in the "Customer ID" field
+    And I should see "4" in the "Product ID" field
+    And I should see "In Progress" in the "Status" dropdown
