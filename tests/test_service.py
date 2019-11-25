@@ -205,3 +205,13 @@ class TestOrderServer(unittest.TestCase):
         """Test INTERNAL_SERVER_ERROR"""
         resp = self.app.post('/orders')
         self.assertEqual(resp.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def test_get_order_by_customer(self):
+        """ Get an order linked to customer id"""
+        test_order = self._create_orders(1)[0]
+        print(test_order.customer_id)
+        resp = self.app.get('/orders/customers/{}'.format(test_order.customer_id),
+                            content_type='application/json')
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()[0]
+        self.assertEqual(data['uuid'], test_order.uuid)

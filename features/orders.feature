@@ -113,3 +113,29 @@ Scenario: Read an order
     And I should see "1" in the "Customer_ID" field
     And I should see "3" in the "Product_ID" field
     And I should see "In Progress" in the "Status" field
+
+Scenario: List orders based on Product ID
+    When I visit the "home page"
+    And I set the "Product_ID" to "4"
+    And I press the "Search" button
+    Then I should see "46" in the results
+    And I should see "134" in the results
+    And I should not see "22" in the results
+
+Scenario: List order based on Customer ID
+    When I visit the "home page"
+    And I set the "Customer_ID" to "2"
+    And I press the "Search" button
+    Then I should see "112" in the results
+    And I should not see "68" in the results
+    And I should not see "10" in the results
+
+Scenario: List all orders
+    When I visit the "home page"
+    And I press the "Search" button
+    Then I should see "22" in the results
+    And I should see "46" in the results
+    And I should see "134" in the results
+    And I should not see "1000" in the results
+
+
