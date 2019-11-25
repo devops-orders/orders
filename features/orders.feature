@@ -93,3 +93,23 @@ Scenario: Delete an order
     And I press the "Delete" button
     Then I should see the message "Order has been Deleted!"
 
+Scenario: Read an order
+    When I visit the "home page"
+    And I set the "Product_ID" to "3"
+    And I press the "Search" button
+    Then I should see "efac5640-0437-4e83-a4d4-37f8a62359d6" in the "uuid" field
+    And I should see "22" in the "Price" field
+    And I should see "10" in the "Quantity" field
+    And I should see "1" in the "Customer_ID" field
+    And I should see "3" in the "Product_ID" field
+    And I should see "In Progress" in the "Status" field
+    When I copy the "ID" field
+    And I press the "Clear" button
+    And I paste the "ID" field
+    And I press the "Retrieve" button
+    Then I should see "efac5640-0437-4e83-a4d4-37f8a62359d6" in the "uuid" field
+    And I should see "22" in the "Price" field
+    And I should see "10" in the "Quantity" field
+    And I should see "1" in the "Customer_ID" field
+    And I should see "3" in the "Product_ID" field
+    And I should see "In Progress" in the "Status" field
