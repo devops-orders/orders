@@ -153,8 +153,8 @@ class Order(db.Model):
         cls.logger.info('Processing lookup or 404 for id %s ...', order_id)
         return cls.query.get_or_404(order_id)
 
-     @classmethod
-     def find_by_customer(cls, customer):
+    @classmethod
+    def find_by_customer(cls, customer):
         """ Returns all of the Orders linked to a customer
         Args:
             customer (int): the customer for the Orders you want to match
