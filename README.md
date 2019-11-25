@@ -14,7 +14,7 @@ URL | Operation | Description
 `DELETE /orders/:id` | DELETE | Delete particular order
 `GET /orders/products/:product_id` | READ | Fetch orders for given product
 `PUT /orders/:id/cancel` | PUT | Cancel order for given order id
-'GET /orders/customers/:customer_id' | GET | Fetch orders for a given customer
+`GET /orders/customers/:customer_id` | GET | Fetch orders for a given customer
 
 #### Run and Test
 - Clone the repository using: `git clone git@github.com:devops-orders/orders.git`
