@@ -100,3 +100,11 @@ Scenario: List orders based on Product ID
     Then I should see "46" in the results
     And I should see "134" in the results
     And I should not see "22" in the results
+
+Scenario: List all orders
+    When I visit the "home page"
+    And I press the "Search" button
+    Then I should see "22" in the results
+    And I should see "46" in the results
+    And I should see "134" in the results
+    And I should not see "1000" in the results
