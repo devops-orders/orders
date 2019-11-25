@@ -93,3 +93,10 @@ Scenario: Delete an order
     And I press the "Delete" button
     Then I should see the message "Order has been Deleted!"
 
+Scenario: List orders based on Product ID
+    When I visit the "home page"
+    And I set the "Product_ID" to "4"
+    And I press the "Search" button
+    Then I should see "46" in the results
+    And I should see "134" in the results
+    And I should not see "22" in the results
