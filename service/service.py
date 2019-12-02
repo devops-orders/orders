@@ -104,22 +104,34 @@ def list_orders(product_id):
     results = [order.serialize() for order in orders]
     return make_response(jsonify(results), status.HTTP_200_OK)
 
-######################################################################
-# RETRIEVE AN ORDER
-######################################################################
 
-@app.route('/orders/<int:order_id>', methods=['GET'])
-def get_orders(order_id):
-    """
-    Retrieve an order
+######################################################################
+#  PATH: /pets/{id}
+######################################################################
+@api.route('/pets/<pet_id>')
+@api.param('pet_id', 'The Pet identifier')
+class PetResource(Resource):
 
-    This endpoint will return an order based on it's id
-    """
-    app.logger.info('Request for an order with id: %s', order_id)
-    order = Order.find(order_id)
-    if not order:
-        raise NotFound("Order with id '{}' was not found.".format(order_id))
-    return make_response(jsonify(order.serialize()), status.HTTP_200_OK)
+    ######################################################################
+    # RETRIEVE AN ORDER
+    ######################################################################
+
+    @api.doc('get_orders')
+    @api.response(404, 'Order not found')
+    @api.marshal_with(order_model)
+
+    @app.route('/orders/<int:order_id>', methods=['GET'])
+    def get_orders(order_id):
+        """
+        Retrieve an order
+
+        This endpoint will return an order based on it's id
+        """
+        app.logger.info('Request for an order with id: %s', order_id)
+        order = Order.find(order_id)
+        if not order:
+            raise NotFound("Order with id '{}' was not found.".format(order_id))
+        return make_response(jsonify(order.serialize()), status.HTTP_200_OK)
 
 
 ######################################################################
