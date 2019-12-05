@@ -7,7 +7,7 @@ applications:
   memory: 64M
   #random-route: true
   routes:
-  - route: devops-orders.mybluemix.net
+  - route: nyu-order-service-19.mybluemix.net
   disk_quota: 1024M
   buildpack: python_buildpack
   timeout: 180
