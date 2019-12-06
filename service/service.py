@@ -170,11 +170,11 @@ def list_orders(product_id):
 
 
 ######################################################################
-#  PATH: /pets/{id}
+#  PATH: /orders/{id}
 ######################################################################
-@api.route('/pets/<pet_id>')
-@api.param('pet_id', 'The Pet identifier')
-class PetResource(Resource):
+@api.route('/orders/<order_id>')
+@api.param('order_id', 'The Order identifier')
+class OrderResource(Resource):
 
     ######################################################################
     # RETRIEVE AN ORDER
