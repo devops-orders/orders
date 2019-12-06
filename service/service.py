@@ -184,7 +184,6 @@ class OrderResource(Resource):
     @api.response(404, 'Order not found')
     @api.marshal_with(order_model)
 
-    @app.route('/orders/<int:order_id>', methods=['GET'])
     def get_orders(order_id):
         """
         Retrieve an order
