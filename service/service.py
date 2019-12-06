@@ -28,6 +28,7 @@ PUT /orders/cancel/:id - cancel an order for a given order id
 """
 
 import logging
+from functools import wraps
 from flask import Flask, jsonify, request, url_for, make_response, abort
 from flask_api import status    # HTTP Status Codes
 from flask_restplus import Api as BaseApi, Resource, fields, reqparse, inputs
@@ -205,23 +206,35 @@ def get_orders(order_id):
 ######################################################################
 # ADD A NEW ORDER
 ######################################################################
-@app.route('/orders', methods=['POST'])
-def order_post():
-    """
-    Creates an order
-    This endpoint will create an order based the data in the body that is posted
-    """
-    app.logger.info('Request to create an order')
-    check_content_type('application/json')
-    order = Order()
-    order.deserialize(request.get_json())
-    order.save()
-    message = order.serialize()
-    location_url = url_for('get_orders', order_id=order.id, _external=True)
-    return make_response(jsonify(message), status.HTTP_201_CREATED,
-                         {
-                             'Location': location_url
-                         })
+@api.route('/orders', strict_slashes=False)
+class PetCollection(Resource):
+    """ Handles all interactions with collections of Orders """
+    #------------------------------------------------------------------
+    # ADD A NEW Order
+    #------------------------------------------------------------------
+    @api.doc('create_orders', security='apikey')
+    @api.expect(create_model)
+    @api.response(400, 'The posted data was not valid')
+    @api.response(201, 'Order created successfully')
+    @api.marshal_with(order_model, code=201)
+    @token_required
+    @app.route('/orders', methods=['POST'])
+    def order_post():
+        """
+        Creates an order
+        This endpoint will create an order based the data in the body that is posted
+        """
+        app.logger.info('Request to create an order')
+        check_content_type('application/json')
+        order = Order()
+        order.deserialize(request.get_json())
+        order.save()
+        message = order.serialize()
+        location_url = url_for('get_orders', order_id=order.id, _external=True)
+        return make_response(jsonify(message), status.HTTP_201_CREATED,
+                             {
+                                 'Location': location_url
+                             })
 
 
 
