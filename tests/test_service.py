@@ -83,13 +83,14 @@ class TestOrderServer(unittest.TestCase):
         """ Test / route """
         resp = self.app.get('/',
                             content_type='application/json')
-        print(resp)
+        print(resp.data)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
     def test_get_order_list(self):
         """ Get a list of Orders """
         self._create_orders(5)
         resp = self.app.get('/orders')
+        print(resp.data)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()
         self.assertEqual(len(data), 5)
