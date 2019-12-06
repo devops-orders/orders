@@ -28,6 +28,7 @@ PUT /orders/cancel/:id - cancel an order for a given order id
 """
 
 import logging
+from functools import wraps
 from flask import Flask, jsonify, request, url_for, make_response, abort
 from flask_api import status    # HTTP Status Codes
 from flask_restplus import Api as BaseApi, Resource, fields, reqparse, inputs
@@ -147,6 +148,46 @@ def token_required(f):
     return decorated
 
 ######################################################################
+#  PATH: /orders/{id}
+######################################################################
+@api.route('/orders/<order_id>')
+@api.param('order_id', 'The Order identifier')
+class OrderResource(Resource):
+    """
+    OrderResource class
+    Allows the manipulation of a single Order
+    GET /order{id} - Returns a Order with the id
+    PUT /order{id} - Update a Order with the id
+    DELETE /order{id} -  Deletes a Order with the id
+    """
+
+    #------------------------------------------------------------------
+    # UPDATE AN EXISTING ORDER
+    #------------------------------------------------------------------
+    @api.doc('update_orders', security='apikey')
+    @api.response(404, 'Order not found')
+    @api.response(400, 'The posted Order data was not valid')
+    @api.expect(order_model)
+    @api.marshal_with(order_model)
+    @token_required
+    def put(self, order_id):
+        """
+        Update a Order
+        This endpoint will update a Order based the body that is posted
+        """
+        app.logger.info('Request to Update a order with id [%s]', order_id)
+        order = Order.find(order_id)
+        if not order:
+            api.abort(status.HTTP_404_NOT_FOUND, "Order with id '{}' was not found.".format(order_id))
+        app.logger.debug('Payload = %s', api.payload)
+        data = api.payload
+        order.deserialize(data)
+        order.id = order_id
+        order.save()
+        return order.serialize(), status.HTTP_200_OK
+
+
+######################################################################
 # GET INDEX
 ######################################################################
 #@api.route('/')
@@ -161,6 +202,7 @@ def index():
 ######################################################################
 # LIST ALL ORDERS
 ######################################################################
+
 @app.route('/orders', methods=['GET'])
 def list_all_orders():
     """ Returns all of the Orders """
