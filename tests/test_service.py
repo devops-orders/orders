@@ -216,3 +216,14 @@ class TestOrderServer(unittest.TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()[0]
         self.assertEqual(data['uuid'], test_order.uuid)
+    
+    def test_get_order_by_customer_fail(self):
+        """ Get an order linked to customer id (FAILURE)"""
+        test_order = self._create_orders(1)[0]
+        print(test_order.customer_id)
+        resp = self.app.get('/orders/customers/{}'.format(0),
+                            content_type='application/json')
+        print(resp.status_code)
+        print(resp.get_json())
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual([], resp.get_json())

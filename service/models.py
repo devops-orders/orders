@@ -128,11 +128,11 @@ class Order(db.Model):
         cls.logger.info('Processing all Orders')
         return cls.query.all()
 
-    @classmethod
-    def find(cls, order_id):
+    @staticmethod
+    def find(order_id):
         """ Finds a Order by it's ID """
-        cls.logger.info('Processing lookup for id %s ...', order_id)
-        return cls.query.get(order_id)
+        Order.logger.info('Processing lookup for id %s ...', order_id)
+        return Order.query.get(order_id)
 
     @classmethod
     def find_by_product(cls, product):
