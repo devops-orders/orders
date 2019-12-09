@@ -4,7 +4,7 @@ applications:
 - name: devops-orders
   path: .
   instances: 2
-  memory: 64M
+  memory: 128M
   #random-route: true
   routes:
   - route: nyu-order-service-19.mybluemix.net
