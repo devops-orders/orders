@@ -51,6 +51,10 @@ class Api(BaseApi):
             # Register documentation before root if enabled
             app_or_blueprint.add_url_rule(self._doc, 'doc', self.render_doc)
         #app_or_blueprint.add_url_rule(self._doc, 'root', self.render_root)
+    
+    @property	
+    def base_path(self):	
+        return ''
 
 ######################################################################
 # Configure Swagger before initilaizing it
