@@ -261,7 +261,7 @@ class OrderCancelResource(Resource):
 ######################################################################
 # LIST ORDERS BASED ON PRODUCT ID
 ######################################################################
-@api.route('/orders/product/<int:product_id>')
+@api.route('/orders/products/<int:product_id>')
 @api.param('product_id', 'The product identifier')
 class OrderProductListResource(Resource):
     """

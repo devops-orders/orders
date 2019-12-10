@@ -212,7 +212,7 @@ $(function () {
             queryString += '/customers/' + customer_id
         }
         else if (product_id) {
-            queryString += '/product/' + product_id
+            queryString += '/products/' + product_id
         }
 
         var ajax = $.ajax({

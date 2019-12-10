@@ -107,7 +107,7 @@ class TestOrderServer(unittest.TestCase):
     def test_get_order_by_product(self):
         """ Get an order linked to product"""
         test_order = self._create_orders(1)[0]
-        resp = self.app.get('/orders/product/{}'.format(test_order.product_id),
+        resp = self.app.get('/orders/products/{}'.format(test_order.product_id),
                             content_type='application/json')
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()[0]
