@@ -216,7 +216,7 @@ class TestOrderServer(unittest.TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()[0]
         self.assertEqual(data['uuid'], test_order.uuid)
-    
+
     def test_get_order_by_customer_fail(self):
         """ Get an order linked to customer id (FAILURE)"""
         test_order = self._create_orders(1)[0]
@@ -227,3 +227,14 @@ class TestOrderServer(unittest.TestCase):
         print(resp.get_json())
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual([], resp.get_json())
+
+    def test_order_reset(self):
+        """Test reset order list by deleting all"""
+        test_order = self._create_orders(1)[0]
+        resp = self.app.delete('/orders/reset')
+        self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(len(resp.data), 0)
+        # make sure they are deleted
+        resp = self.app.get('/orders/{}'.format(test_order.id),
+                            content_type='application/json')
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
