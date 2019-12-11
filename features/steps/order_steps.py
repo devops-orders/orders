@@ -71,14 +71,14 @@ def step_impl(context, button):
 def step_impl(context, text_string, element_name):
     element_id = 'order_' + element_name.lower()
     element = context.driver.find_element_by_id(element_id)
-    expect(element.get_attribute('value')).to_equal(text_string)
-    #found = WebDriverWait(context.driver, WAIT_SECONDS).until(
-    #    expected_conditions.text_to_be_present_in_element_value(
-    #        (By.ID, element_id),
-    #        text_string
-    #    )
-    #)
-    #expect(found).to_be(True)
+    #expect(element.get_attribute('value')).to_equal(text_string)
+    found = WebDriverWait(context.driver, WAIT_SECONDS).until(
+        expected_conditions.text_to_be_present_in_element_value(
+            (By.ID, element_id),
+            text_string
+        )
+    )
+    expect(found).to_be(True)
 
 
 @when(u'I change "{element_name}" to "{text_string}"')
