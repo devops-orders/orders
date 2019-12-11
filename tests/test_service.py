@@ -46,11 +46,13 @@ class TestOrderServer(unittest.TestCase):
         initialize_logging(logging.INFO)
         # Set up the test database
         app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
+        app.config["SQLALCHEMY_POOL_RECYCLE"] = 30
         init_db()
 
     @classmethod
     def tearDownClass(cls):
-        db.drop_all()
+        # db.drop_all()
+        pass
 
     def setUp(self):
         """ Runs before each test """
@@ -62,6 +64,8 @@ class TestOrderServer(unittest.TestCase):
 
     def tearDown(self):
         db.session.remove()
+        db.drop_all()
+        db.get_engine(app).dispose()
 
 
     def _create_orders(self, count):
