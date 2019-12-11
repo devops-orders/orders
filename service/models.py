@@ -30,11 +30,18 @@ price (integer) : unit price of the product
 quantity (integer) : number of products items in the order
 
 """
+import os
 import logging
 from flask_sqlalchemy import SQLAlchemy
+from retry import retry
+from requests import HTTPError
 
 # Create the SQLAlchemy object to be initialized later in init_db()
 db = SQLAlchemy()
+
+RETRY_COUNT = int(os.environ.get('RETRY_COUNT', 10))
+RETRY_DELAY = int(os.environ.get('RETRY_DELAY', 1))
+RETRY_BACKOFF = int(os.environ.get('RETRY_BACKOFF', 2))
 
 class DataValidationError(Exception):
     """ Used for an data validation errors when deserializing """
@@ -118,11 +125,15 @@ class Order(db.Model):
         db.create_all()  # make our sqlalchemy tables
 
     @classmethod
+    @retry(HTTPError, delay=RETRY_DELAY, backoff=RETRY_BACKOFF, tries=RETRY_COUNT,
+           logger=logger)
     def remove_all(cls):
         """ Removes all documents from the database (use for testing)  """
         cls.query.delete()
 
     @classmethod
+    @retry(HTTPError, delay=RETRY_DELAY, backoff=RETRY_BACKOFF, tries=RETRY_COUNT,
+           logger=logger)
     def all(cls):
         """ Returns all of the Orders in the database """
         cls.logger.info('Processing all Orders')
