@@ -10,7 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support import expected_conditions
 
-WAIT_SECONDS = int(getenv('WAIT_SECONDS', '5'))
+WAIT_SECONDS = int(getenv('WAIT_SECONDS', '60'))
 
 @given(u'the server is started')
 def step_impl(context):
@@ -21,7 +21,6 @@ def step_impl(context):
 def step_impl(context):
     """ Delete all Orders and load new ones """
     headers = {'Content-Type': 'application/json'}
-    print(context.base_url)
     context.resp = requests.delete(context.base_url + '/orders/reset', headers=headers)
     expect(context.resp.status_code).to_equal(204)
     create_url = context.base_url + '/orders'
@@ -71,11 +70,7 @@ def step_impl(context, button):
 @then('I should see "{text_string}" in the "{element_name}" field')
 def step_impl(context, text_string, element_name):
     element_id = 'order_' + element_name.lower()
-    print(element_id)
     element = context.driver.find_element_by_id(element_id)
-    print("*****")
-    print(element.get_attribute('value'))
-    print("*****")
     expect(element.get_attribute('value')).to_equal(text_string)
     #found = WebDriverWait(context.driver, WAIT_SECONDS).until(
     #    expected_conditions.text_to_be_present_in_element_value(

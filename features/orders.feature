@@ -19,11 +19,12 @@ Scenario: Update an Order
     When I visit the "home page"
     And I set the "Product_ID" to "3"
     And I press the "Search" button
-    Then I should see "22" in the "Price" field
-    Then I should see "10" in the "Quantity" field
-    Then I should see "1" in the "Customer_ID" field
-    Then I should see "3" in the "Product_ID" field
-    Then I should see "In Progress" in the "Status" field
+    Then I should see "efac5640-0437-4e83-a4d4-37f8a62359d6" in the "uuid" field
+    And I should see "22" in the "Price" field
+    And I should see "10" in the "Quantity" field
+    And I should see "1" in the "Customer_ID" field
+    And I should see "3" in the "Product_ID" field
+    And I should see "In Progress" in the "Status" field
     When I change "Quantity" to "150"
     And I press the "Update" button
     Then I should see the message "Success"
@@ -32,10 +33,10 @@ Scenario: Update an Order
     And I paste the "ID" field
     And I press the "Retrieve" button
     Then I should see "150" in the "Quantity" field
-    When I press the "Clear" button
-    And I press the "Search" button
-    Then I should see "150" in the results
-    And I should not see "10" in the results
+    #When I press the "Clear" button
+    #And I press the "Search" button
+    #Then I should see "150" in the results
+    #And I should not see "10" in the results
 
 
 Scenario: Create an Order
@@ -68,11 +69,12 @@ Scenario: Cancel an Order
     When I visit the "home page"
     And I set the "Product_ID" to "3"
     And I press the "Search" button
-    Then I should see "22" in the "Price" field
-    Then I should see "10" in the "Quantity" field
-    Then I should see "1" in the "Customer_ID" field
-    Then I should see "3" in the "Product_ID" field
-    Then I should see "In Progress" in the "Status" dropdown
+    Then I should see "efac5640-0437-4e83-a4d4-37f8a62359d6" in the "uuid" field
+    And I should see "22" in the "Price" field
+    And I should see "10" in the "Quantity" field
+    And I should see "1" in the "Customer_ID" field
+    And I should see "3" in the "Product_ID" field
+    And I should see "In Progress" in the "Status" dropdown
     When I select "Cancelled" in the "Status" dropdown
     And I press the "Update" button
     Then I should see the message "Success"
@@ -86,6 +88,7 @@ Scenario: Delete an order
     When I visit the "Home Page"
     And I set the "Product_ID" to "3"
     And I press the "Search" button
+    Then I should see "efac5640-0437-4e83-a4d4-37f8a62359d6" in the "uuid" field
     When I copy the "ID" field
     And I press the "Delete" button
     Then I should see the message "Order has been Deleted!"
@@ -94,20 +97,22 @@ Scenario: Read an order
     When I visit the "home page"
     And I set the "Product_ID" to "3"
     And I press the "Search" button
-    Then I should see "22" in the "Price" field
-    Then I should see "10" in the "Quantity" field
-    Then I should see "1" in the "Customer_ID" field
-    Then I should see "3" in the "Product_ID" field
-    Then I should see "In Progress" in the "Status" field
+    Then I should see "efac5640-0437-4e83-a4d4-37f8a62359d6" in the "uuid" field
+    And I should see "22" in the "Price" field
+    And I should see "10" in the "Quantity" field
+    And I should see "1" in the "Customer_ID" field
+    And I should see "3" in the "Product_ID" field
+    And I should see "In Progress" in the "Status" field
     When I copy the "ID" field
     And I press the "Clear" button
     And I paste the "ID" field
     And I press the "Retrieve" button
-    Then I should see "22" in the "Price" field
-    Then I should see "10" in the "Quantity" field
-    Then I should see "1" in the "Customer_ID" field
-    Then I should see "3" in the "Product_ID" field
-    Then I should see "In Progress" in the "Status" field
+    Then I should see "efac5640-0437-4e83-a4d4-37f8a62359d6" in the "uuid" field
+    And I should see "22" in the "Price" field
+    And I should see "10" in the "Quantity" field
+    And I should see "1" in the "Customer_ID" field
+    And I should see "3" in the "Product_ID" field
+    And I should see "In Progress" in the "Status" field
 
 Scenario: List orders based on Product ID
     When I visit the "home page"
@@ -115,15 +120,15 @@ Scenario: List orders based on Product ID
     And I press the "Search" button
     Then I should see "46" in the results
     And I should see "134" in the results
-    And I should not see "22" in the results
+    And I should not see "In Progress" in the results
 
 Scenario: List order based on Customer ID
     When I visit the "home page"
     And I set the "Customer_ID" to "2"
     And I press the "Search" button
     Then I should see "112" in the results
-    And I should not see "68" in the results
-    And I should not see "10" in the results
+    And I should not see "In Progress" in the results
+    And I should not see "Cancelled" in the results
 
 Scenario: List all orders
     When I visit the "home page"
@@ -131,6 +136,4 @@ Scenario: List all orders
     Then I should see "22" in the results
     And I should see "46" in the results
     And I should see "134" in the results
-    And I should not see "1000" in the results
-
-
+    #And I should not see "1000" in the results
