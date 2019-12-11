@@ -30,7 +30,7 @@ class TestOrders(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        pass
+        db.drop_all()
 
     def setUp(self):
         Order.init_db(app)
@@ -39,7 +39,6 @@ class TestOrders(unittest.TestCase):
 
     def tearDown(self):
         db.session.remove()
-        db.drop_all()
 
     def test_create_a_order(self):
         """ Create a order and assert that it exists """

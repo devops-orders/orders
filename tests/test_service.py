@@ -49,7 +49,7 @@ class TestOrderServer(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        pass
+        db.drop_all()
 
     def setUp(self):
         """ Runs before each test """
@@ -62,7 +62,6 @@ class TestOrderServer(unittest.TestCase):
 
     def tearDown(self):
         db.session.remove()
-        db.drop_all()
 
 
     def _create_orders(self, count):
