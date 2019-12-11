@@ -27,10 +27,12 @@ class TestOrders(unittest.TestCase):
         app.debug = False
         # Set up the test database
         app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
+        app.config["SQLALCHEMY_POOL_RECYCLE"] = 30
 
     @classmethod
     def tearDownClass(cls):
-        db.drop_all()
+        # db.drop_all()
+        pass
 
     def setUp(self):
         Order.init_db(app)
@@ -39,6 +41,8 @@ class TestOrders(unittest.TestCase):
 
     def tearDown(self):
         db.session.remove()
+        db.drop_all()
+        db.get_engine(app).dispose()
 
     def test_create_a_order(self):
         """ Create a order and assert that it exists """
